@@ -7,32 +7,47 @@
     <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
-<input type="text" id="searchInput" placeholder="Search tasks by name">
+<div class="flex-container" style="display: flex">
+    <label for="searchInput"></label>
+    <input type="text" id="searchInput" placeholder="Search tasks by name">
 
-<button onclick="fetchTodayTasks()">Today's Tasks</button>
+    <button style="margin-left: 0.5vw" onclick="fetchTodayTasks()">Today's Tasks</button>
 
-<button onclick="fetchWeekTasks()">This Week's Tasks</button>
+    <button style="margin-left: 0.5vw" onclick="fetchWeekTasks()">This Week's Tasks</button>
 
-<input type="checkbox" id="showIncompleteOnly">Show Incomplete Only
+    <div class="incomplete-box">
+        <label class="incomplete-box-label" for="showIncompleteOnly">
+            <input type="checkbox" id="showIncompleteOnly">
+            <span class="custom-checkbox"></span>
+            <span>Show Incomplete Only</span>
+        </label>
+    </div>
+</div>
 
 <br><br>
-<label for="startDate">Start Date: </label>
-<input type="date" id="startDate">
+
+<div style="display: block">
+<label for="startDate" style="margin-bottom: 10px">Start Date: </label>
+<input type="date" id="startDate" style="display: block; margin-bottom: 10px">
+
 <label for="endDate">End Date: </label>
-<input type="date" id="endDate">
+<input type="date" id="endDate" style="display: block; margin-bottom: 20px">
+
 <button onclick="fetchTasksByDate()">Fetch Tasks by Date</button>
-<br><br>
+</div>
+
+<br>
+
 <button onclick="sortTasksByDate()">Sort Tasks by Date</button>
 
 <div class="task-list" id="taskList"></div>
 
-<!-- Modal -->
-<div id="taskModal" style="display: none;">
-    <div style="background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%;"></div>
-    <div style="background: white; padding: 20px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 30vw;">
-        <h2>Task Description</h2>
-        <p id="modalContent"></p>
-        <button onclick="closeTaskModal()">Close</button>
+<!-- Modal window -->
+<div id="taskModal" style="display: none">
+    <div style="background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%"></div>
+    <div class="modal-window">
+        <p style="margin-top: 0" id="modalContent"></p>
+        <button class="modal-close-btn" onclick="closeTaskModal()">Close</button>
     </div>
 </div>
 

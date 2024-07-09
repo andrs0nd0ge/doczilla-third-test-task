@@ -87,7 +87,7 @@ function renderTasks(tasks) {
                 <h3>${task.name}</h3>
                 <p>${task.shortDesc}</p>
                 <p><strong>Date: ${new Date(task.date).toLocaleDateString()}</strong></p>
-                <button style="margin-left: 0" onclick="openTaskModal('${task.fullDesc}')">Full Description</button>
+                <button class="desc-btn" style="margin-left: 0" onclick="openTaskModal('${task.fullDesc}')">Full Description</button>
             `;
             taskList.appendChild(taskItem);
         });

@@ -1,9 +1,14 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
+    background-color: #1f1f1f;
+    color: #d3d3d3;
 }
 h1, h2 {
     text-align: center;
+}
+.flex-container {
+    display: flex;
 }
 .task-list {
     margin-top: 20px;
@@ -14,8 +19,112 @@ h1, h2 {
     margin-bottom: 10px;
 }
 .task-item.done {
-    background-color: #e0ffe0;
+    background-color: #558f55;
 }
 .task-item button {
     margin-left: 10px;
+}
+input[type="text"], input[type="date"] {
+    color-scheme: dark;
+    padding: 9px;
+}
+.incomplete-box {
+    border: 1px solid #b2b2b2;
+    border-radius: 2px;
+    margin-left: 0.5vw;
+}
+.incomplete-box-label {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+}
+::placeholder {
+    color: #d3d3d3;
+}
+button {
+    padding: 10px;
+    background-color: #0052a9;
+    color: white;
+    border: 1px solid #b2b2b2;
+    border-radius: 2px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #006ade;
+}
+.modal-window {
+    display: flex;
+    flex-direction: column;
+    background: #181818;
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30vw;
+    border-radius: 5px;
+    border: 1px solid #3a3a3a;
+}
+.modal-close-btn {
+    margin: 0 auto;
+    width: 40%;
+    padding: 8px;
+}
+.desc-btn {
+    background-color: transparent;
+}
+.desc-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+
+
+
+
+
+
+/* Hide the default checkbox */
+input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.custom-checkbox {
+    margin-right: 0.5vw;
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+/* Style the checkbox when hovered */
+input[type="checkbox"]:hover + .custom-checkbox {
+    background-color: #b3b3b3;
+}
+
+/* Style the custom checkmark/indicator */
+.custom-checkbox::after {
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+}
+
+/* Show the checkmark when checked */
+input[type="checkbox"]:checked + .custom-checkbox::after {
+    display: block;
+}
+
+/* Change background color when checked */
+input[type="checkbox"]:checked + .custom-checkbox {
+    background-color: #1c79da;
 }
