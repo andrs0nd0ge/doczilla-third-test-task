@@ -2,21 +2,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const apiUrl = 'https://todo.doczilla.pro/api/todos';
     const taskList = document.getElementById('taskList');
     const searchInput = document.getElementById('search');
-    const showIncompleteCheckbox = document.getElementById('showIncomplete');
 
     searchInput.addEventListener('input', function() {
         const value = searchInput.value;
-        fetchTasks({ name: value });
+        fetchSpecificTasks({ 'q': value });
     });
 
-    showIncompleteCheckbox.addEventListener('change', function() {
-        fetchTasks();
-    });
-
-    function fetchTasks() {
-        const url = new URL(apiUrl);
+    function fetchSpecificTasks(queryParams = {}) {
+        const url = new URL(apiUrl + '/find');
+        Object.keys(queryParams).forEach(key => url.searchParams.append(key, queryParams[key]));
 
         fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                renderTasks(data);
+            })
+            .catch(error => {
+                console.error('Error fetching tasks:', error);
+            });
+    }
+
+    function fetchTasks() {
+        fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
                 renderTasks(data);
