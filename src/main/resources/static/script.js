@@ -1,5 +1,6 @@
 const apiUrl = 'http://localhost:8080/api/proxy/todos';
 const taskList = document.getElementById('taskList');
+
 let sortingIsAscending = true;
 
 document.getElementById('searchInput').addEventListener('input', function() {
@@ -17,7 +18,14 @@ function fetchTasks(url) {
 function fetchTasksByDate() {
     const startDate = new Date(document.getElementById('startDate').value).getTime();
     const endDate = new Date(document.getElementById('endDate').value).getTime();
-    fetchTasks(`${apiUrl}/date?from=${startDate}&to=${endDate}`);
+    const showIncompleteOnly = document.getElementById('showIncompleteOnly').checked;
+    let url = `${apiUrl}/date?from=${startDate}&to=${endDate}`;
+
+    if (showIncompleteOnly) {
+        url = url + `&status=${showIncompleteOnly}`;
+    }
+
+    fetchTasks(url);
 }
 
 function sortTasksByDate() {
@@ -43,22 +51,35 @@ function fetchTodayTasks() {
     const today = new Date();
     const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
     const endOfDay = startOfDay + 24 * 60 * 60 * 1000;
-    fetchTasks(`${apiUrl}/date?from=${startOfDay}&to=${endOfDay}`);
+    const showIncompleteOnly = document.getElementById('showIncompleteOnly').checked;
+    let url = `${apiUrl}/date?from=${startOfDay}&to=${endOfDay}`;
+
+    if (showIncompleteOnly) {
+        url = url + `&status=${showIncompleteOnly}`;
+    }
+
+    fetchTasks(url);
 }
 
 function fetchWeekTasks() {
     const today = new Date();
     const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay())).getTime();
     const endOfWeek = startOfWeek + 7 * 24 * 60 * 60 * 1000;
-    fetchTasks(`${apiUrl}/date?from=${startOfWeek}&to=${endOfWeek}`);
+    const showIncompleteOnly = document.getElementById('showIncompleteOnly').checked;
+
+    let url = `${apiUrl}/date?from=${startOfWeek}&to=${endOfWeek}`;
+
+    if (showIncompleteOnly) {
+        url = url + `&status=${showIncompleteOnly}`;
+    }
+
+    fetchTasks(url);
 }
 
 function renderTasks(tasks) {
     taskList.innerHTML = '';
-    const showIncompleteOnly = document.getElementById('showIncompleteOnly').checked;
 
     tasks
-        .filter(task => !showIncompleteOnly || !task.status)
         .forEach(task => {
             const taskItem = document.createElement('div');
             taskItem.className = `task-item ${task.status ? 'done' : ''}`;

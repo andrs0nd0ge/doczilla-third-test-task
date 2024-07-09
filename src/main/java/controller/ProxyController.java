@@ -39,15 +39,17 @@ public class ProxyController {
     @GetMapping("date")
     public ResponseEntity<String> proxyTodosDate(@RequestParam long from,
                                                  @RequestParam long to,
-                                                 @RequestParam boolean status) {
+                                                 @RequestParam(required = false) Boolean status) {
         String externalApiUrl = "https://todo.doczilla.pro/api/todos/date?";
 
-        @SuppressWarnings("StringBufferReplaceableByString")
         StringBuilder sb = new StringBuilder(externalApiUrl);
 
         sb.append("from=").append(from);
         sb.append("&to=").append(to);
-        sb.append("&status=").append(status);
+
+        if (status != null) {
+            sb.append("&status=").append(status);
+        }
 
         ResponseEntity<String> response = fetchGetResponse(sb.toString());
 
