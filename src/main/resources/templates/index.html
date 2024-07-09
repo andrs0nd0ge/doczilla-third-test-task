@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../static/styles.css">
+        <title>Test Task</title>
+    </head>
+    <body>
+    <div class="todo-container">
+        <h1>Todo List</h1>
+        <div class="controls">
+            <div>
+                <input type="text" id="search" placeholder="Search tasks">
+            </div>
+            <div>
+                <button id="todayTasks">Today</button>
+            </div>
+            <div>
+                <button id="weekTasks">This Week</button>
+            </div>
+            <div>
+                <input type="checkbox" id="showIncomplete"> Show Incomplete
+            </div>
+        </div>
+        <div>
+            <input type="text" id="dateRange" placeholder="Select Date Range">
+        </div>
+        <div class="task-list" id="taskList"></div>
+    </div>
+
+    <div id="taskModal" style="display: none;">
+        <p id="taskDescription"></p>
+    </div>
+
+    <script src="../static/script.js"></script>
+    </body>
+</html>
