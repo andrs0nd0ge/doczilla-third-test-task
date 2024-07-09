@@ -1,53 +1,84 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const apiUrl = 'https://todo.doczilla.pro/api/todos';
-    const taskList = document.getElementById('taskList');
-    const searchInput = document.getElementById('search');
+const apiUrl = 'https://todo.doczilla.pro/api/todos';
+const taskList = document.getElementById('taskList');
+let sortingIsAscending = true;
 
-    searchInput.addEventListener('input', function() {
-        const value = searchInput.value;
-        fetchSpecificTasks({ 'q': value });
+document.getElementById('searchInput').addEventListener('input', function() {
+    const query = this.value;
+    searchTasks(query);
+});
+
+function fetchTasks(url) {
+    fetch(url)
+        .then(response => response.json())
+        .then(data => renderTasks(data))
+        .catch(error => console.error('Error fetching tasks:', error));
+}
+
+function fetchTasksByDate() {
+    const startDate = new Date(document.getElementById('startDate').value).getTime();
+    const endDate = new Date(document.getElementById('endDate').value).getTime();
+    fetchTasks(`${apiUrl}/date?from=${startDate}&to=${endDate}`);
+}
+
+function sortTasksByDate() {
+    const tasks = Array.from(taskList.children);
+    tasks.sort((a, b) => {
+        const dateTextA = a.querySelector('p strong').innerText.split(': ')[1];
+        const dateTextB = b.querySelector('p strong').innerText.split(': ')[1];
+
+        const dateA = new Date(dateTextA);
+        const dateB = new Date(dateTextB);
+
+        return sortingIsAscending ? dateA - dateB : dateB - dateA;
     });
+    sortingIsAscending = !sortingIsAscending;
+    tasks.forEach(task => taskList.appendChild(task));
+}
 
-    function fetchSpecificTasks(queryParams = {}) {
-        const url = new URL(apiUrl + '/find');
-        Object.keys(queryParams).forEach(key => url.searchParams.append(key, queryParams[key]));
+function searchTasks(query = '') {
+    fetchTasks(`${apiUrl}/find?q=${query}`);
+}
 
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                renderTasks(data);
-            })
-            .catch(error => {
-                console.error('Error fetching tasks:', error);
-            });
-    }
+function fetchTodayTasks() {
+    const today = new Date();
+    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+    const endOfDay = startOfDay + 24 * 60 * 60 * 1000;
+    fetchTasks(`${apiUrl}/date?from=${startOfDay}&to=${endOfDay}`);
+}
 
-    function fetchTasks() {
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                renderTasks(data);
-            })
-            .catch(error => {
-                console.error('Error fetching tasks:', error);
-            });
-    }
+function fetchWeekTasks() {
+    const today = new Date();
+    const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay())).getTime();
+    const endOfWeek = startOfWeek + 7 * 24 * 60 * 60 * 1000;
+    fetchTasks(`${apiUrl}/date?from=${startOfWeek}&to=${endOfWeek}`);
+}
 
-    function renderTasks(tasks) {
-        taskList.innerHTML = '';
+function renderTasks(tasks) {
+    taskList.innerHTML = '';
+    const showIncompleteOnly = document.getElementById('showIncompleteOnly').checked;
 
-        tasks.forEach(task => {
+    tasks
+        .filter(task => !showIncompleteOnly || !task.status)
+        .forEach(task => {
             const taskItem = document.createElement('div');
             taskItem.className = `task-item ${task.status ? 'done' : ''}`;
             taskItem.innerHTML = `
                 <h3>${task.name}</h3>
                 <p>${task.shortDesc}</p>
-                <p><strong>Date:</strong> ${new Date(task.date).toLocaleDateString()}</p>
+                <p><strong>Date: ${new Date(task.date).toLocaleDateString()}</strong></p>
+                <button style="margin-left: 0" onclick="openTaskModal('${task.fullDesc}')">Full Description</button>
             `;
-
             taskList.appendChild(taskItem);
         });
-    }
+}
 
-    fetchTasks();
-});
+function openTaskModal(description) {
+    document.getElementById('modalContent').innerText = description;
+    document.getElementById('taskModal').style.display = 'block';
+}
+
+function closeTaskModal() {
+    document.getElementById('taskModal').style.display = 'none';
+}
+
+fetchTasks(apiUrl);
