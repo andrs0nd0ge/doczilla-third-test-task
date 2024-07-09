@@ -1,4 +1,4 @@
-const apiUrl = 'https://todo.doczilla.pro/api/todos';
+const apiUrl = 'http://localhost:8080/api/proxy/todos';
 const taskList = document.getElementById('taskList');
 let sortingIsAscending = true;
 
